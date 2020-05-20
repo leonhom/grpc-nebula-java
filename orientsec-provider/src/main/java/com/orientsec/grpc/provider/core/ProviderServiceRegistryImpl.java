@@ -75,13 +75,20 @@ public class ProviderServiceRegistryImpl implements ProviderServiceRegistry {
       return;
     }
 
+    // 服务配置
     servicesConfig = new ArrayList<Map<String, Object>>(servicesParams.size());
+
+    // 服务监听信息
     listenersInfo = new ArrayList<Map<String, Object>>(servicesParams.size());
+
+    // 获取IP地址
     ip = IpUtils.getIP4WithPriority();
 
     RegistryTask registerTask = new RegistryTask(this, servicesParams);
     try {
-     registerTask.work();
+
+      // 注册服务
+      registerTask.work();
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
       throw new BusinessException(e.getMessage(), e);

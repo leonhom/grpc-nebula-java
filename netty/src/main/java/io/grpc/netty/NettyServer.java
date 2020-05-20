@@ -181,18 +181,27 @@ class NettyServer implements InternalServer, InternalWithLogId {
     b.childHandler(new ChannelInitializer<Channel>() {
       @Override
       public void initChannel(Channel ch) throws Exception {
+
         //----begin----连接数控制----
 
+        // 获取远程调用的Adress信息。/192.168.1.1:50000
         String remoteAddr = ch.remoteAddress().toString();
-        int maxConnetions = SystemConfig.getProviderMaxConnetions(); // 最大连接数
 
+        // 获取系统配置的最大连接数，默认20
+        int maxConnetions = SystemConfig.getProviderMaxConnetions();
+
+        // 从address中获取指定的IP地址
         String ipAddr = getIpAddr(remoteAddr);
+
         if (maxConnetions > 0) {
           // int currentConnetions = listener.getServerTransportCount();// 当前连接数
+
+          // 获取当前客户端的IP连接数量
           int currentConnetions = getTransportCountByIp(listener.getTransports(), ipAddr);
           if (currentConnetions >= maxConnetions) {
             synchronized (NettyServer.this) {
               LOGGER.warn("当前客户端IP:{} 连接数超配置上限，上限{}，当前连接数{}", ipAddr, maxConnetions, currentConnetions);
+
               // 关闭channel，使客户端能立即捕捉到异常
               ch.close();
               return;

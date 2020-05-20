@@ -161,7 +161,8 @@ public class RegistryTask {
 
     for (ConfigFile conf : allConf) {
       if (ConfigFileHelper.confFileCommonKeys.containsKey(conf.getName())){
-        proName = ConfigFileHelper.COMMON_KEY_PREFIX + conf.getName();// 配置文件中的属性名
+        // 配置文件中的属性名
+        proName = ConfigFileHelper.COMMON_KEY_PREFIX + conf.getName();
       } else {
         proName = ConfigFileHelper.PROVIDER_KEY_PREFIX + conf.getName();
       }
@@ -169,7 +170,8 @@ public class RegistryTask {
       if (pros.containsKey(proName)) {
         value = pros.getProperty(proName);
         if (value != null) {
-          value = value.trim();// 去空格
+          // 去空格
+          value = value.trim();
         }
 
         providerConfig.put(conf.getName(), value);

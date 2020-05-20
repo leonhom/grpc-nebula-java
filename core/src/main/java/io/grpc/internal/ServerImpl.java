@@ -193,12 +193,16 @@ public final class ServerImpl extends io.grpc.Server implements InternalInstrume
     @Override
     public void run() {
       List<Map<String,Object>> params = createServerParams();
+
+      // 注册服务
       providerRegistry.register(params);
     }
   };
 
   /**
    * 将服务注册与注销相关的参数封装成一个对象
+   *
+   * 封装服务的Interface、方法名、端口号至Map
    *
    * @author sxp
    * @since V1.0 2017/3/21
@@ -218,18 +222,25 @@ public final class ServerImpl extends io.grpc.Server implements InternalInstrume
       sb.setLength(0);
 
       methodDesps = item.getServiceDescriptor().getMethods();
+
+      // 封装当前服务方法名字符串
       for (MethodDescriptor<?, ?> md : methodDesps) {
         methodName = GrpcUtils.getSimpleMethodName(md.getFullMethodName());
         sb.append(methodName);
-        sb.append(",");// 多个方法之间用英文逗号分隔
+        // 多个方法之间用英文逗号分隔
+        sb.append(",");
       }
+
+      // 删除最后一个,
       sb.deleteCharAt(sb.lastIndexOf(","));
 
+      // 保存当前服务数据
       oneService = new HashMap<>();
       oneService.put(GlobalConstants.Provider.Key.INTERFACE, item.getServiceDescriptor().getName());
       oneService.put(GlobalConstants.CommonKey.METHODS, sb.toString());
       oneService.put(GlobalConstants.PROVIDER_SERVICE_PORT, port);
 
+      // 将服务保存至Map
       params.add(oneService);
     }
 
