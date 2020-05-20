@@ -67,7 +67,8 @@ public class SystemSwitch {
    * @since V1.0 2017-5-4
    */
   private static boolean initSwitch(String key, boolean defaultValue) {
-    boolean enabled = defaultValue;// 默认值
+    // 默认值
+    boolean enabled = defaultValue;
 
     Properties pros = SystemConfig.getSwitchProperties();
 
